@@ -1,0 +1,64 @@
+
+<LinearLayout android:id="@+id/notification_base"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3c3c3c"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:ignore="ContentDescription">
+
+        <ImageView
+
+            android:id="@+id/logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_launcher"
+            />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+            <TextView android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/notificationTitle"
+                android:text="@string/app_name"
+                />
+            <TextView
+                android:textSize="12dp"
+                android:typeface="normal"
+                android:textColor="#fff"
+                android:gravity="left"
+                android:id="@+id/notification_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorAccent"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:layout_weight="1.0"
+                android:text="kiem tra" />
+        </LinearLayout>
+        <ImageView
+
+            android:id="@+id/notification_radio_state"
+            android:padding="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/btn_playback_play"
+            />
+        <ImageView
+
+            android:id="@+id/notification_exit"
+            android:padding="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/btn_notification_collapse"
+            />
+</LinearLayout>
+
+
