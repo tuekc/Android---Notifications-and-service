@@ -10,14 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 
 public class NotificationService extends Service{
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mLocalBinder;
@@ -28,6 +26,7 @@ public class NotificationService extends Service{
             return NotificationService.this;
         }
     }
+
 
     /**
      * Service called
@@ -57,8 +56,8 @@ public class NotificationService extends Service{
         if (action.equals(NOTIFICATION_INTENT_CANCEL)) {
           //do....
             Toast.makeText(getBaseContext(),"cancel click", Toast.LENGTH_LONG).show();
-            if (mNotificationManager != null) {
-                mNotificationManager.cancel(NOTIFICATION_ID);
+            if (MainActivity.objInit().mNotificationManager  != null) {
+                MainActivity.objInit().mNotificationManager.cancel(NOTIFICATION_ID);
                 this.onDestroy();
 
             }
@@ -68,22 +67,22 @@ public class NotificationService extends Service{
          * Check player state and stop/play streaming.
          */
         else if (action.equals(NOTIFICATION_INTENT_PLAY_PAUSE)) {
-            Toast.makeText(getBaseContext(), "Play an Pause click", Toast.LENGTH_LONG).show();
-            //// do.....
+             //// do.....
             if (_Play)
                 Pause();
             else
                 Play() ;
-            initNotifyMedia();
+           // initNotifyMedia();
         }
         else if (action.equals(NOTIFICATION_INTENT_OPEN_PLAYER)) {
             Toast.makeText(getBaseContext(), "NOTIFICATION_INTENT_OPEN_PLAYER", Toast.LENGTH_LONG).show();
             //// do.....
+
             if (_Play)
                 Pause();
             else
                 Play() ;
-            initNotifyMedia();
+          //  initNotifyMedia();
         }
         return START_NOT_STICKY;
     }
@@ -91,10 +90,11 @@ public class NotificationService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+/*
         mNotificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);*/
 
-
+      //  mNotificationManager = MainActivity.getmNotificationManager();
     }
 
 
@@ -111,15 +111,20 @@ public class NotificationService extends Service{
     public  void  Play()
     {
         _Play =true;
-        strDescription =" Play Radio";
 
+        strDescription =" Play Radio";
+        MainActivity.objInit().set_Play(true, strDescription);
+    //    MainActivity.objInit().initNotifyMedia();
     }
     public  void Pause() {
         _Play = false;
         strDescription = " Pause Radio";
+        MainActivity.objInit().set_Play(false, strDescription);
+  /*      MainActivity.objInit().initNotifyMedia();*/
 
     }
     String strDescription="Chuong trinh phat thanh online";
+
 
     public   void initNotifyMedia()
     {
@@ -130,23 +135,24 @@ public class NotificationService extends Service{
         Intent intentOpenPlayer = new Intent(NOTIFICATION_INTENT_OPEN_PLAYER);
         Intent intentCancel = new Intent(NOTIFICATION_INTENT_CANCEL);
 
-        /**
-         * Pending intents
-         */
+
+      //   * Pending intents
+
+
         PendingIntent playPausePending = PendingIntent.getService(this, 0, intentPlayPause, 0);
         PendingIntent openPending = PendingIntent.getService(this, 0, intentOpenPlayer, 0);
         PendingIntent cancelPending = PendingIntent.getService(this, 0, intentCancel, 0);
 
-        /**
-         * Remote view for normal view
-         */
+
+         //* Remote view for normal view
+
 
         RemoteViews mNotificationTemplate = new RemoteViews(this.getPackageName(), R.layout.notification);
         Notification.Builder notificationBuilder = new Notification.Builder(this);
 
-        /**
-         * set small notification texts and image
-         */
+
+         //* set small notification texts and image
+
         if (artImage == null)
             artImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_launcher);
 
@@ -170,21 +176,22 @@ public class NotificationService extends Service{
                 .build();
         notification.flags = Notification.FLAG_ONGOING_EVENT;
 
+//  * OnClickPending intent for collapsed notification
 
-        /**
-         * OnClickPending intent for collapsed notification
-         */
+
         mNotificationTemplate.setOnClickPendingIntent(R.id.notification_exit, cancelPending);
         mNotificationTemplate.setOnClickPendingIntent(R.id.notification_radio_state, playPausePending);
 
 
 
         // mId allows you to update the notification later on.
-         mNotificationManager.notify(notificationID, notification);
+        if (mNotificationManager != null)
+            mNotificationManager.notify(notificationID, notification);
 
 
 
     }
+
 
 
     private void log(String log) {
